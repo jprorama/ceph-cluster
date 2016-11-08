@@ -1,0 +1,4 @@
+# list the accounts with admin rights to the cluster
+cluster_admins:
+  - user1
+  - user2

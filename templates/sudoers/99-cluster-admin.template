@@ -1,0 +1,3 @@
+{% for user in cluster_admins %}
+{{ user }} ALL = (root) NOPASSWD:ALL
+{% endfor %}

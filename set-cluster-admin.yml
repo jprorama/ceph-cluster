@@ -1,0 +1,20 @@
+#
+# ensure the cluster admin users get passwordless root on admin node
+# this is a bootstrap via su+password for the admin node
+# enables the cluster to be managed via ansible
+#
+# note:  run playbook with --ask-become-pass to prompt for root password
+#
+- hosts: admin
+  become: yes
+  become_method: su
+  become_user: root
+  vars_files:
+    - site_vars.yml
+
+  tasks:
+    - name: put passwordless sudo config on admin node
+      template:
+        src:  templates/sudoers/99-cluster-admin.template
+        dest: /etc/sudoers.d/99-cluster-admin
+        mode: 0600

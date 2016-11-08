@@ -32,3 +32,17 @@ ansible -i hosts -m ping admin
 ```
 
 You should receive a pong response from the admin node.
+
+### Set the cluster admin users
+
+Copy the site_vars.yml.sample file to site_vars.yml and update the list of
+cluster_admins for you cluster.  These are the accounts that will have
+passwordless root access to your admin node and will be therefore own your cluster.
+
+Update the cluster_admins
+```sh
+ansible-playbook -i hosts set-cluster-admins.yml --ask-become-pass
+```
+
+Note, this is a bootstrap to passwordless access, so a normal su and password method
+are used.
