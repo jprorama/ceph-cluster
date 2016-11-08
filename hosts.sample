@@ -1,0 +1,12 @@
+[admin]
+head ansible_host=ceph-admin
+
+[mons]
+mon1 ansible_host=ceph-mon-01 ansible_user=cephansible-user
+mon2 ansible_host=ceph-mon-02 ansible_user=cephansible-user
+mon3 ansible_host=ceph-mon-03 ansible_user=cephansible-user
+
+[osds]
+osd1 ansible_host=ceph-osd-01 ansible_user=cephansible-user
+osd2 ansible_host=ceph-osd-02 ansible_user=cephansible-user
+osd3 ansible_host=ceph-osd-03 ansible_user=cephansible-user
