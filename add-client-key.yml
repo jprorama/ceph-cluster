@@ -1,0 +1,18 @@
+#
+# add the cluster admin ansible key to the cluster nodes
+#
+---
+- hosts: admin
+  vars:
+     key:  "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+  vars_files:
+    - site_vars.yml
+
+  tasks:
+     - name: push key to head node as a playbook
+       template:
+         src:  templates/client-keys.template
+         dest: ~/key-update.yml
+
+     - name: distribute key to cluster nodes using ceph-ansible role
+       shell: ansible-playbook key-update.yml

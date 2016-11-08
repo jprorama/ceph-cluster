@@ -2,3 +2,6 @@
 cluster_admins:
   - user1
   - user2
+
+# define the cluster wide ceph-ansible user
+cephansible_user: cephansibleadmin

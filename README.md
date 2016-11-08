@@ -46,3 +46,23 @@ ansible-playbook -i hosts set-cluster-admins.yml --ask-become-pass
 
 Note, this is a bootstrap to passwordless access, so a normal su and password method
 are used.
+
+### Add client keys to the ceph-ansible account (optional)
+
+Managing the ceph cluster leverages the ceph-ansbile user set up during the
+initial cluster install steps.   The add-client-key playbook simplifies adding
+the public key of the cluster admin account in ~/.ssh/id_rsa.pub to the already
+configured internal ceph-ansible user account.  Update the site_vars to define
+the account name which matches the internal cluster configuration.
+
+```sh
+ansible-playbook -i hosts add-client-key.yml
+```
+
+After this update the cluster admin should be able to ping all nodes in the
+cluster, given a working hosts file configuration.  The following should return
+a pong response from all cluster nodes including the admin (head) node.
+
+```sh
+ansible -i hosts -m ping all --become
+```

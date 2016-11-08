@@ -1,0 +1,5 @@
+- hosts: all
+
+  tasks:
+    - name: add public key to account
+      authorized_key: user={{ cephansible_user }} key="{{ key }}"
