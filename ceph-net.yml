@@ -17,14 +17,7 @@
 
 
     - name: create network interface
-      nmcli:
-        type: vlan
-        conn_name: "{{ item.conn_name }}"
-        ifname: "{{ item.ifname }}"
-        vlandev: "{{ item.ifname }}"
-        vlanid: "{{ item.vlanid }}"
-        ip4: "{{ item.ip4 }}"
-        state: present
+      shell: nmcli con add type vlan con-name "{{ item.conn_name }}" dev "{{ item.ifname }}" id {{ item.vlanid }} ip4 {{ item.ip4 }}
       with_items:
         "{{ nmcli_ethernet }}"
 
