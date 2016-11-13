@@ -32,10 +32,6 @@
         "{{ nmcli_ethernet }}"
 
     - name: set jumbo frame mtu on vlan interfaces
-      nmcli:
-         type: vlan
-         conn_name: "{{ item.conn_name }}"
-         mtu: 9000
-         state: present
+      shell: nmcli con modify "{{ item.conn_name }}" 802.mtu 9000
       with_items:
         "{{ nmcli_ethernet }}"
