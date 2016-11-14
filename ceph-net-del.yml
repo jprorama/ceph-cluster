@@ -1,0 +1,13 @@
+#
+# remove the public and cluster networks for ceph
+#
+
+- hosts: osds, mons, clients
+  become: yes
+  become_user: root
+
+  tasks:
+  - name: remove the ceph vlans
+    shell: nmcli con delete "{{ item.conn_name }}"
+    with_items:
+      "{{ nmcli_ethernet }}"

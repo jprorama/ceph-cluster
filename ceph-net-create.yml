@@ -1,0 +1,42 @@
+#
+# configure the public and cluster networks for ceph
+#
+
+- hosts: osds, mons, clients
+  become: yes
+  become_user: root
+  vars_files:
+    - site_vars.yml
+
+  tasks:
+    - name: ensure libnm-glib installed for ansible nmcli support
+      yum:
+        name: NetworkManager-glib
+        state: present
+      when: ansible_os_family == "RedHat" and ansible_lsb.major_release|int >= 7
+
+    - name: configure em2 for parent device role for as vlandev
+      shell: nmcli con modify {{ item.vlandev }} ipv4.method disabled ipv4.never-default true ipv6.method ignore connection.autoconnect true 802-3-ethernet.mtu 9000
+      when: item.conn_name == "ceph_cluster_lan"
+      with_items:
+        "{{ nmcli_ethernet }}"
+
+    - name: set jumbo frame mtu on ethernet interfaces
+      nmcli:
+         type: ethernet
+         conn_name: "{{ item.ifname }}"
+         ifname: "{{ item.ifname }}"
+         mtu: 9000
+         state: present
+      with_items:
+        "{{ nmcli_ethernet }}"
+
+    - name: create network interface
+      shell: nmcli con add type vlan con-name "{{ item.conn_name }}" dev "{{ item.vlandev }}" id {{ item.vlanid }} ip4 {{ item.ip4 }}
+      with_items:
+        "{{ nmcli_ethernet }}"
+
+    - name: set jumbo frame mtu on vlan interfaces
+      shell: nmcli con modify "{{ item.conn_name }}" 802.mtu 9000
+      with_items:
+        "{{ nmcli_ethernet }}"
