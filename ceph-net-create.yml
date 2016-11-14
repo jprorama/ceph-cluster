@@ -16,7 +16,10 @@
       when: ansible_os_family == "RedHat" and ansible_lsb.major_release|int >= 7
 
     - name: configure em2 for parent device role for as vlandev
-      shell: nmcli con modify em2 ipv4.method disabled ipv4.never-default true ipv6.method ignore connection.autoconnect true 802-3-ethernet.mtu 9000
+      shell: nmcli con modify {{ item.vlandev }} ipv4.method disabled ipv4.never-default true ipv6.method ignore connection.autoconnect true 802-3-ethernet.mtu 9000
+      when: item.conn_name == "ceph_cluster_lan"
+      with_items:
+        "{{ nmcli_ethernet }}"
 
     - name: set jumbo frame mtu on ethernet interfaces
       nmcli:
