@@ -2,7 +2,7 @@
 # remove the public and cluster networks for ceph
 #
 
-- hosts: osd1
+- hosts: osds, mons, clients
   become: yes
   become_user: root
 
