@@ -21,13 +21,9 @@
       with_items:
         "{{ nmcli_ethernet }}"
 
-    - name: set jumbo frame mtu on ethernet interfaces
-      nmcli:
-         type: ethernet
-         conn_name: "{{ item.ifname }}"
-         ifname: "{{ item.ifname }}"
-         mtu: 9000
-         state: present
+    - name: activate jumbo frame mtu on ethernet interfaces
+      shell: ip link set {{ item.vlandev }} mtu 9000
+      when: item.conn_name == "ceph_cluster_lan"
       with_items:
         "{{ nmcli_ethernet }}"
 
