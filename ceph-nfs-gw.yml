@@ -12,3 +12,16 @@
         name: ceph-common
         state: present
       when: ansible_os_family == "RedHat" and ansible_lsb.major_release|int >= 7
+
+    - name: open nfsd port for NFSv4
+      firewalld: port=2049/tcp permanent=true state=enabled immediate=true
+
+    - name: enable nfs server services at boot
+      service:
+        name: nfs-server
+        enabled: yes
+
+    - name: start nfs server
+      service:
+        name: nfs
+        state: started
