@@ -1,0 +1,14 @@
+#
+# configure an nfs gateway ceph
+#
+
+- hosts: nfsgw
+  become: yes
+  become_user: root
+
+  tasks:
+    - name: ensure ceph-common installed for client support
+      yum:
+        name: ceph-common
+        state: present
+      when: ansible_os_family == "RedHat" and ansible_lsb.major_release|int >= 7
