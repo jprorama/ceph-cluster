@@ -13,6 +13,13 @@
         state: present
       when: ansible_os_family == "RedHat" and ansible_lsb.major_release|int >= 7
 
+    - name: ceph-selinux support to allow rbd device reads from rpcmount
+      yum:
+        name: ceph-selinux
+        state: present
+      when: ansible_selinux.config_mode == "enforcing" or
+            ansible_selinux.config_mode == "permissive"
+
     - name: open nfsd port for NFSv4
       firewalld: port=2049/tcp permanent=true state=enabled immediate=true
 
