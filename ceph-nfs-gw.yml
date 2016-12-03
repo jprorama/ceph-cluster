@@ -16,6 +16,27 @@
     - name: open nfsd port for NFSv4
       firewalld: port=2049/tcp permanent=true state=enabled immediate=true
 
+    - name: open rpcbind port for NFSv3
+      firewalld: port=111/tcp permanent=true state=enabled immediate=true
+
+    - name: open rpcbind port for NFSv3 (udp)
+      firewalld: port=111/udp permanent=true state=disabled immediate=true
+
+    - name: open rpcstatd port for NFSv3
+      firewalld: port=10002/tcp permanent=true state=enabled immediate=true
+
+    - name: open rpcstatd port for NFSv3
+      firewalld: port=10003/tcp permanent=true state=enabled immediate=true
+
+    - name: open rpcmount port for NFSv3
+      firewalld: port=10004/tcp permanent=true state=enabled immediate=true
+
+    - name: open rpcquotad port for NFSv3
+      firewalld: port=10005/tcp permanent=true state=enabled immediate=true
+
+    - name: open lockd port for NFSv3
+      firewalld: port=10006/tcp permanent=true state=enabled immediate=true
+
     - name: enable nfs server services at boot
       service:
         name: nfs-server
