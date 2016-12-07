@@ -20,7 +20,7 @@
       firewalld: port=111/tcp permanent=true state=enabled immediate=true
 
     - name: open rpcbind port for NFSv3 (udp)
-      firewalld: port=111/udp permanent=true state=disabled immediate=true
+      firewalld: port=111/udp permanent=true state=enabled immediate=true
 
     - name: open rpcstatd port for NFSv3
       firewalld: port=10002/tcp permanent=true state=enabled immediate=true
@@ -30,6 +30,9 @@
 
     - name: open rpcmount port for NFSv3
       firewalld: port=10004/tcp permanent=true state=enabled immediate=true
+
+    - name: open rpcmount port for NFSv3 (udp)
+      firewalld: port=10004/udp permanent=true state=enabled immediate=true
 
     - name: open rpcquotad port for NFSv3
       firewalld: port=10005/tcp permanent=true state=enabled immediate=true
