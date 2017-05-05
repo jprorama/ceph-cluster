@@ -1,0 +1,58 @@
+#
+# configure an nfs gateway ceph
+#
+
+- hosts: nfsgw
+  become: yes
+  become_user: root
+
+  tasks:
+    - name: ensure ceph-common installed for client support
+      yum:
+        name: ceph-common
+        state: present
+      when: ansible_os_family == "RedHat" and ansible_lsb.major_release|int >= 7
+
+    - name: ensure selinux python support installed
+      yum:
+        name: libselinux-python
+        state: present
+
+    - name: turn off selinux enforcing on NFS gateway (see https://bugzilla.redhat.com/show_bug.cgi?id=1406470)
+      selinux:
+        policy: targeted
+        state: permissive
+
+    - name: open nfsd port for NFSv4
+      firewalld: port=2049/tcp permanent=true state=enabled immediate=true
+
+    - name: open rpcbind port for NFSv3
+      firewalld: port=111/tcp permanent=true state=enabled immediate=true
+
+    - name: open rpcbind port for NFSv3 (udp)
+      firewalld: port=111/udp permanent=true state=disabled immediate=true
+
+    - name: open rpcstatd port for NFSv3
+      firewalld: port=10002/tcp permanent=true state=enabled immediate=true
+
+    - name: open rpcstatd port for NFSv3
+      firewalld: port=10003/tcp permanent=true state=enabled immediate=true
+
+    - name: open rpcmount port for NFSv3
+      firewalld: port=10004/tcp permanent=true state=enabled immediate=true
+
+    - name: open rpcquotad port for NFSv3
+      firewalld: port=10005/tcp permanent=true state=enabled immediate=true
+
+    - name: open lockd port for NFSv3
+      firewalld: port=10006/tcp permanent=true state=enabled immediate=true
+
+    - name: enable nfs server services at boot
+      service:
+        name: nfs-server
+        enabled: yes
+
+    - name: start nfs server
+      service:
+        name: nfs
+        state: started
